@@ -1,0 +1,221 @@
+package filrouge2;
+
+import java.util.InputMismatchException;
+import java.util.Scanner;
+
+public class StockManager {
+  public static void main(String[] args) {
+    
+	  // Mes Produits
+	  
+	  String[] items = {
+			  
+			  "Blouson SIMILI First Class", "Blouson Prenium Zip", "Blouson Finition PLatinum"};
+    
+	  // Stock interne de la boutique
+	  
+	  int[] stockLevels = {10, 5, 8};
+	  
+	  // Prix de chaques Articles
+	  
+    double[] prices = {40.99, 29.99, 129.99};
+    
+    
+    int[] initialStockLevels = {10, 5, 8};
+    
+    // Prix d'achat
+    
+    double[] purchasePrices = {20.0, 15.0, 60.0};
+
+    try (Scanner scan = new Scanner(System.in)) {
+      while (true) {
+        System.out.println("");	
+        System.out.println("");	
+        System.out.println("		|==========================================|");			
+        System.out.println("		|         Choisissez une option :          |");
+        System.out.println("		|==========================================|");		  
+        System.out.println("		| 1. Afficher les articles en vente        |");
+	    System.out.println("		|__________________________________________|");		
+        System.out.println("		| 2. Vendre un article                     |");
+        System.out.println("		|__________________________________________|");		
+        System.out.println("		| 3. Ajouter un article au stock           |");    
+        System.out.println("		|__________________________________________|");
+        System.out.println("		| 4. Modifier le tarif d'un article        |");    
+        System.out.println("		|__________________________________________|");
+        System.out.println("		| 5. Afficher  entrées et sorties d'argent |");    
+        System.out.println("		|__________________________________________|");
+        System.out.println("		| 6. Retour au menu principal              |");    
+        System.out.println("		|__________________________________________|");
+        System.out.println("");
+        System.out.println("		Faites votre Selection et Appuyez sur ENTREE :");	
+
+        int choice = 0;
+        while
+        (choice == 0) {
+          try {
+            System.out.print("Indiquez votre choix : ");
+            choice = scan.nextInt();
+            
+         // InputMismatchException Permet d eviter de mettre uniquement que des Chiffres a la saisie
+          } catch (InputMismatchException e) {
+            System.out.println("Veuillez entrer un chiffre.");
+            scan.nextLine();
+          }
+        }
+        if (choice == 1) {
+        	
+          // Afficher les articles en vente
+        	
+          for (int i = 0; i < items.length; i++) {
+            System.out.println(items[i] + " - Prix : " + prices[i] + " € - Stock : " + stockLevels[i]);
+          }
+          System.out.println("Appuyez sur ENTREE pour continuer.");
+          scan.nextLine();
+          scan.nextLine();
+        } else if (choice == 2) {
+        	
+          // Acheter un article
+        	
+          while (true) {
+            System.out.println("Choisissez l'article que vous souhaitez vendre :");
+            for (int i = 0; i < items.length; i++) {
+              System.out.println((i+1) + ". " + items[i] + " - Prix : " + prices[i] + " €");
+            }
+            int itemIndex = scan.nextInt() - 1;
+            if (itemIndex >= 0 && itemIndex < items.length) {
+              int quantity;
+              while (true) {
+                System.out.println("Entrez la quantité souhaitée :");
+                quantity = scan.nextInt();
+                if (quantity > 0) {
+                  break;
+                }
+                System.out.println("La quantité doit être positive.");
+              }
+              if (quantity > stockLevels[itemIndex]) {
+                System.out.println("Stock insuffisant. Nous n'avons que " + stockLevels[itemIndex] + " unité(s) disponible(s).");
+              } else {
+                stockLevels[itemIndex] -= quantity;
+                System.out.println
+                ("Vous avez vendu " + quantity + " unité(s) de " + items[itemIndex] + 
+                		" pour un total de " + (quantity * prices[itemIndex]) + " €.");
+              }
+            } else {
+              System.out.println("Article non valide.");
+            }
+            System.out.println("Appuyez sur ENTREE pour continuer.");
+            scan.nextLine();
+            scan.nextLine();
+            break;
+          }
+        } else if (choice == 3) {
+        	
+          // Ajouter un article au stock
+        	
+          while (true) {
+            System.out.println("Choisissez l'article que vous souhaitez ajouter au stock :");
+            for (int i = 0; i < items.length; i++) {
+              System.out.println((i+1) + ". " + items[i]);
+            }
+            int itemIndex = scan.nextInt() - 1;
+            if (itemIndex >= 0 && itemIndex < items.length) {
+              int
+              quantity;
+              while (true) {
+                System.out.println("Entrez la quantité à ajouter :");
+                quantity = scan.nextInt();
+                if (quantity > 0) {
+                  break;
+                }
+                System.out.println("La quantité doit être positive.");
+              }
+              double price;
+              while (true) {
+                System.out.println("Entrez le prix d'achat unitaire :");
+                price = scan.nextDouble();
+                if (price > 0) {
+                  break;
+                }
+                System.out.println("Le prix doit être positif.");
+              }
+              stockLevels[itemIndex] += quantity;
+              purchasePrices[itemIndex] = price;
+              System.out.println(quantity + " unité(s) de " + items[itemIndex] + " ont été ajoutées au stock.");
+            } else {
+              System.out.println("Article non valide.");
+            }
+            System.out.println("Appuyez sur ENTREE pour continuer.");
+            scan.nextLine();
+            scan.nextLine();
+            break;
+          }
+        } else if (choice == 4) {
+        	
+          // Modifier le tarif d'un article
+        	
+          while (true) {
+            System.out.println("Choisissez l'article dont vous souhaitez modifier le tarif :");
+            for (int i = 0; i < items.length; i++) {
+              System.out.println((i+1) + ". " + items[i] + " - Prix actuel : " + prices[i] + " €");
+            }
+            int itemIndex = scan.nextInt() - 1;
+            if (itemIndex >= 0 && itemIndex < items.length) {
+              double newPrice;
+              while (true) {
+                System.out.println("Entrez le nouveau tarif :");
+                newPrice = scan.nextDouble();
+                if (newPrice > 0) {
+                  break;
+                }
+                System.out.println("Le tarif doit être positif.");
+              }
+              prices[itemIndex] = newPrice;
+              System.out.println("Le tarif de l'article " + items[itemIndex] + " a été modifié.");
+            } else {
+              System.out.println("Article non valide.");
+            }
+            System.out.println("Appuyez sur ENTREE pour continuer.");
+            scan.nextLine();
+            scan.nextLine();
+            break;
+          }
+        } else if (choice == 5) {
+        	
+          // Afficher les entrées et sorties d'argent
+        	
+          double totalIncome = 0;
+          double totalExpenses = 0;
+          for (int i = 0; i < items.length; i++) {
+            int stockDifference = stockLevels[i] - initialStockLevels[i];
+            if (stockDifference > 0) {
+            	
+              // L'article a été vendu
+            	
+              totalIncome += stockDifference * prices[i];
+        } else if (stockDifference < 0) {
+	
+              // L'article a été acheté
+
+              totalExpenses += -stockDifference * purchasePrices[i];
+            }
+          }
+          System.out.println("Total des sorties d'argent : " + totalIncome + " €");
+          System.out.println("Total des entrées d'argent : " + totalExpenses + " €");
+          System.out.println("Bénéfice net : " + (totalIncome - totalExpenses) + " €");
+          System.out.println("Appuyez sur ENTREE pour continuer.");
+          scan.nextLine();
+          scan.nextLine();
+        } else if (choice == 6) {
+        	
+          // Retour au menu principal
+        	
+         
+        } else {
+          System.out.println("Choix non valide.");
+        }
+      }
+    }
+  }
+}
+
+
